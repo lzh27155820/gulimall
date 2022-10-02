@@ -1,0 +1,11 @@
+
+
+#      globalcors:
+#        cors-configurations:
+#          '[/**]':
+#            allowCredentials: true
+#            allowedHeaders: "*"
+#            allowedOrigins: "*"
+#            allowedMethods: "*"
+#            add-to-simple-url-handler-mapping: true
+

@@ -5,7 +5,12 @@ import com.liu.xyz.common.utils.PageUtils;
 import com.liu.xyz.common.utils.R;
 import com.liu.xyz.gulimall.product.entity.BrandEntity;
 import com.liu.xyz.gulimall.product.service.BrandService;
+import com.liu.xyz.gulimall.product.valid.AddGroup;
+import com.liu.xyz.gulimall.product.valid.UpdateGroup;
+import com.liu.xyz.gulimall.product.valid.UpdateStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -18,6 +23,7 @@ import java.util.Map;
  * @email sunlightcs@gmail.com
  * @date 2022-09-29 22:18:42
  */
+@Slf4j
 @RestController
 @RequestMapping("product/brand")
 public class BrandController {
@@ -49,7 +55,9 @@ public class BrandController {
      * 保存
      */
     @RequestMapping("/save")
-    public  R save(@RequestBody BrandEntity brand){
+    public  R save(@Validated({AddGroup.class}) @RequestBody BrandEntity brand){
+
+
 		brandService.save(brand);
 
         return R.ok();
@@ -59,11 +67,24 @@ public class BrandController {
      * 修改
      */
     @RequestMapping("/update")
-    public R update(@RequestBody BrandEntity brand){
-		brandService.updateById(brand);
-
+    public R update(@Validated({UpdateGroup.class}) @RequestBody BrandEntity brand){
+        log.info("修的值"+brand);
+		//brandService.updateById(brand);
+        brandService.updateByIdDeatil(brand);
         return R.ok();
     }
+    /**
+     * 修改
+     */
+    @RequestMapping("/update/status")
+    public R updateStatus(@Validated({UpdateStatus.class}) @RequestBody BrandEntity brand){
+        log.info("修的值"+brand);
+        //brandService.updateById(brand);
+
+        brandService.updateByIdDeatil(brand);
+        return R.ok();
+    }
+
 
     /**
      * 删除

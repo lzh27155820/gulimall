@@ -8,6 +8,9 @@ spring:
     nacos:
       config:
         server-addr: localhost:8848
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+
   application:
     name: gulimall-produect
 mybatis-plus:
@@ -16,5 +19,9 @@ mybatis-plus:
     db-config:
       id-type: auto
 
+
 server:
   port: 9000
+logging:
+  level:
+    com.liu.xyz: debug

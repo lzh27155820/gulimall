@@ -19,6 +19,7 @@
         <module>renren-fast</module>
         <module>renren-generator</module>
         <module>gulimall-commit</module>
+        <module>gulimall-third-party</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -49,7 +50,7 @@
         <mysql-connector.version>8.0.29</mysql-connector.version>
         <spring-data-commons.version>2.7.0</spring-data-commons.version>
         <jjwt.version>0.9.1</jjwt.version>
-        <aliyun-oss.version>2.5.0</aliyun-oss.version>
+        <aliyun-oss.version>3.5.0</aliyun-oss.version>
         <logstash-logback.version>5.3</logstash-logback.version>
         <admin-starter-server.version>2.7.0</admin-starter-server.version>
         <minio.version>8.4.1</minio.version>

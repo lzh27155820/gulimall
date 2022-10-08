@@ -7,17 +7,22 @@ import com.liu.xyz.common.utils.PageUtils;
 import com.liu.xyz.common.utils.Query;
 import com.liu.xyz.gulimall.product.dao.CategoryDao;
 import com.liu.xyz.gulimall.product.entity.CategoryEntity;
+import com.liu.xyz.gulimall.product.service.CategoryBrandRelationService;
 import com.liu.xyz.gulimall.product.service.CategoryService;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
 @Service("categoryService")
 public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity> implements CategoryService {
 
+    @Autowired
+    private CategoryBrandRelationService categoryBrandRelationService;
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         IPage<CategoryEntity> page = this.page(
@@ -39,6 +44,43 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
                 .collect(Collectors.toList());
         return list;
     }
+
+    @Override
+    public void removeByIdAll(Long[] catIds){
+        //TODO 如果别的地方要用就不能删除
+        List<Long> collect = Arrays.stream(catIds).collect(Collectors.toList());
+        baseMapper.deleteBatchIds(collect);
+    }
+
+    @Override
+    public Long[] getByIdCatelogPath(Long catelogId) {
+        ArrayList<Long> longs = new ArrayList<>();
+        get(catelogId,longs);
+
+        Collections.reverse(longs);
+        return longs.toArray(new Long[longs.size()]);
+    }
+
+    @Transactional
+    @Override
+    public void updateByIdDeatil(CategoryEntity category) {
+        baseMapper.updateById(category);
+        if(!StringUtils.isEmpty(category.getName())){
+            categoryBrandRelationService.updateCategory(category.getCatId(),category.getName());
+        }
+    }
+
+    public List<Long> get(Long catelogId ,List<Long> longs){
+
+        longs.add(catelogId);
+        CategoryEntity categoryEntity = baseMapper.selectById(catelogId);
+        if(categoryEntity.getParentCid()!=0){
+            get(categoryEntity.getParentCid(),longs);
+        }
+        return longs;
+
+    }
+
 
     public CategoryEntity searchChildren(CategoryEntity meun,List<CategoryEntity> all){
 

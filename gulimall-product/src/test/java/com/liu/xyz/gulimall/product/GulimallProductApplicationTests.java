@@ -1,13 +1,12 @@
 package com.liu.xyz.gulimall.product;
 
 
-import com.liu.xyz.gulimall.product.entity.CategoryEntity;
 import com.liu.xyz.gulimall.product.service.CategoryService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
+import java.util.Arrays;
 
 @SpringBootTest
 class GulimallProductApplicationTests {
@@ -16,10 +15,14 @@ class GulimallProductApplicationTests {
     private CategoryService categoryService;
 
     @Test
-    public void ss(){
+    public void test(){
+        Long[] byIdCatelogPath = categoryService.getByIdCatelogPath(225L);
 
-        List<CategoryEntity> list = categoryService.list();
-        System.out.println(list);
+        System.out.println(Arrays.toString(byIdCatelogPath));
+
     }
+
+
+
 
 }

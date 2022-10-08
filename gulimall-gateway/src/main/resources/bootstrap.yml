@@ -11,6 +11,28 @@ spring:
         file-extension: yaml
     gateway:
       routes:
+        - id: gulimall_ware
+          uri: lb://gulimall-ware
+          predicates:
+            - Path=/api/ware/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+
+        - id: gulimall_member
+          uri: lb://gulimall-member
+          predicates:
+            - Path=/api/member/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: third_party_route
+          uri: lb://gulimall-third-party
+          predicates:
+            - Path=/api/thirdparty/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
         - id: product_route
           uri: lb://gulimall-produect
           predicates:

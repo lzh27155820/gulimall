@@ -1,7 +1,7 @@
 package com.liu.xyz.gulimall.product.dao;
 
-import com.liu.xyz.gulimall.product.entity.AttrGroupEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.liu.xyz.gulimall.product.entity.AttrGroupEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -13,5 +13,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface AttrGroupDao extends BaseMapper<AttrGroupEntity> {
-	
+
 }

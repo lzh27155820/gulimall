@@ -4,10 +4,14 @@ import com.liu.xyz.common.utils.PageUtils;
 import com.liu.xyz.common.utils.R;
 import com.liu.xyz.gulimall.ware.entity.PurchaseEntity;
 import com.liu.xyz.gulimall.ware.service.PurchaseService;
+import com.liu.xyz.gulimall.ware.vo.MergeVo;
+import com.liu.xyz.gulimall.ware.vo.PurchaseDoneVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 
@@ -25,6 +29,41 @@ public class PurchaseController {
     @Autowired
     private PurchaseService purchaseService;
 
+
+    /**
+     * /ware/purchase/done
+     */
+    @RequestMapping("/done")
+    public R done(@RequestBody PurchaseDoneVo purchaseDoneVo){
+
+        purchaseService.dong(purchaseDoneVo);
+        return R.ok();
+    }
+    /**
+     * /ware/purchase/received
+     */
+    @RequestMapping("received")
+    public R received(@RequestBody List<Long> ids){
+
+        purchaseService.receivedPurchase(ids);
+        return R.ok();
+    }
+
+    @RequestMapping("/merge")
+    public R mergePurchase(@RequestBody MergeVo mergeVo){
+
+        purchaseService.mergePurchase(mergeVo);
+        return R.ok();
+    }
+    /**查询未领取的采购单
+     * unreceive/list
+     */
+    @RequestMapping("/unreceive/list")
+    public R unreceiveList(@RequestParam Map<String, Object> params){
+        PageUtils page = purchaseService.unreceiveQueryPage(params);
+
+        return R.ok().put("page", page);
+    }
     /**
      * 列表
      */
@@ -51,6 +90,10 @@ public class PurchaseController {
      */
     @RequestMapping("/save")
     public R save(@RequestBody PurchaseEntity purchase){
+
+
+        purchase.setCreateTime(new Date());
+        purchase.setUpdateTime(new Date());
 		purchaseService.save(purchase);
 
         return R.ok();

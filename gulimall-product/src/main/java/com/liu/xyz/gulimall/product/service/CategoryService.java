@@ -3,6 +3,7 @@ package com.liu.xyz.gulimall.product.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.liu.xyz.common.utils.PageUtils;
 import com.liu.xyz.gulimall.product.entity.CategoryEntity;
+import com.liu.xyz.gulimall.product.web.vo.Catelog2Vo;
 
 import java.util.List;
 import java.util.Map;
@@ -42,5 +43,15 @@ public interface CategoryService extends IService<CategoryEntity> {
      * @param category
      */
     void updateByIdDeatil(CategoryEntity category);
+
+    /*
+     *  获取 parent_cid 为0的数据
+     * @return
+     */
+    List<CategoryEntity> getLevelCategorys();
+    /*
+        获取
+     */
+    Map<String, List<Catelog2Vo>> getCatalogJson();
 }
 

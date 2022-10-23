@@ -1,16 +1,23 @@
 package com.liu.xyz.gulimall.product.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.liu.xyz.common.productUtils.ProductConstant;
+import com.liu.xyz.common.to.SkuHasStockVo;
 import com.liu.xyz.common.to.SkuReductionTo;
 import com.liu.xyz.common.to.SpuBoundsTo;
+import com.liu.xyz.common.to.es.SkuESModel;
 import com.liu.xyz.common.utils.PageUtils;
 import com.liu.xyz.common.utils.Query;
 import com.liu.xyz.common.utils.R;
 import com.liu.xyz.gulimall.product.dao.SpuInfoDao;
 import com.liu.xyz.gulimall.product.entity.*;
 import com.liu.xyz.gulimall.product.feign.CouponFeignService;
+import com.liu.xyz.gulimall.product.feign.SearchFeignSerive;
+import com.liu.xyz.gulimall.product.feign.WareFeignService;
 import com.liu.xyz.gulimall.product.service.*;
 import com.liu.xyz.gulimall.product.vo.*;
 import org.apache.commons.lang.StringUtils;
@@ -20,10 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -48,6 +52,15 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
     SkuSaleAttrValueService skuSaleAttrValueService;
     @Autowired
     CouponFeignService couponFeignService;
+    @Autowired
+    private BrandService brandService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private WareFeignService wareFeignService;
+
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
 
@@ -177,8 +190,8 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
                    // skuReductionTo.setMemberPrice(itme.getMemberPrice());
                     List<MemberPrice> memberPrice = itme.getMemberPrice();
 
-                   List<com.liu.xyz.common.to.MemberPrice> list = new
-                           ArrayList<>();
+                    List<com.liu.xyz.common.to.MemberPrice> list = new
+                            ArrayList<>();
                     for (MemberPrice e:memberPrice ){
                         com.liu.xyz.common.to.MemberPrice memberPrice1 = new com.liu.xyz.common.to.MemberPrice();
                         memberPrice1.setPrice(e.getPrice());
@@ -204,6 +217,96 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         baseMapper.insert(spuInfoEntity);
     }
 
+    @Autowired
+    private SearchFeignSerive searchFeignSerive;
+    @Override
+    public void up(Long spuId) {
+
+        List<SkuESModel> skuESModelList = new ArrayList<>();
+        //4. Todo 查询 所有规格属性 attrsList
+        List<ProductAttrValueEntity> attrValueEntities = productAttrValueService.baseAttrListforspu(spuId);
+
+        List<Long> attrIds = attrValueEntities.stream().map(obj -> {
+                    return obj.getAttrId();
+                }
+        ).collect(Collectors.toList());
+
+
+
+      List<Long> searchAttrIds =attrService.getSearchAttrIds(attrIds);
+        HashSet<Long> idset = new HashSet<>(searchAttrIds);
+
+        ArrayList<SkuESModel.Attrs> attrs = new ArrayList<>();
+
+        List<SkuESModel.Attrs> list = attrValueEntities.stream().filter(obj -> {
+
+            return idset.contains(obj.getAttrId());
+        }).map(obj -> {
+            SkuESModel.Attrs attrs1 = new SkuESModel.Attrs();
+            BeanUtils.copyProperties(obj, attrs1);
+            return attrs1;
+        }).collect(Collectors.toList());
+
+
+
+        List<SkuInfoEntity> skuInfoEntityList = skuInfoService.list(new QueryWrapper<SkuInfoEntity>().eq("spu_id", spuId));
+
+        //1.TODO 发送远程调用 查看 库存 hastStock hotScore
+        Map<Long, Boolean> map =new HashMap<>();
+        try {
+            List<Long> skuIds = skuInfoEntityList.stream().map(SkuInfoEntity::getSkuId).collect(Collectors.toList());
+            R<List<SkuHasStockVo>> r = wareFeignService.hastStock(skuIds);
+            List<SkuHasStockVo>  stockVoList=(List<SkuHasStockVo>) r.get("data");
+           // System.out.println(stockVoList);
+            for(Object e:stockVoList){
+                String s = JSON.toJSONString(e);
+                SkuHasStockVo vo = JSONObject.parseObject(s, SkuHasStockVo.class);
+                map.put(vo.getSkuId(),vo.getHastStock());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        Map<Long, Boolean> finalMap = map;
+        List<SkuESModel> collect = skuInfoEntityList.stream().map(skuInfo -> {
+            SkuESModel esModel = new SkuESModel();
+
+            BeanUtils.copyProperties(skuInfo, esModel);
+            //单独处理 skuImg skuPrice  brandName brandImg catalogName
+            esModel.setSkuPrice(skuInfo.getPrice());
+            esModel.setSkuImg(skuInfo.getSkuDefaultImg());
+            if(finalMap ==null){
+                esModel.setHastStock(true);
+            }else {
+                esModel.setHastStock(finalMap.get(skuInfo.getSkuId()));
+            }
+
+            //2.TODO 热度评分
+
+            //3.TODO 查询品牌和分类的信息
+            BrandEntity brand = brandService.getById(skuInfo.getBrandId());
+            esModel.setBrandName(brand.getName());
+            esModel.setBrandImg(brand.getLogo());
+            CategoryEntity category = categoryService.getById(skuInfo.getCatalogId());
+            esModel.setCatalogId(category.getCatId());
+            esModel.setCatalogName(category.getName());
+            //
+            esModel.setAttrs(list);
+            return esModel;
+        }).collect(Collectors.toList());
+        //保存到es中
+        R r = searchFeignSerive.get(collect);
+
+        if(r.getCode()==0){
+
+            baseMapper.updateStatus(spuId, ProductConstant.StatusEnum.UP_SPU.getCode());
+        }else {
+            //TODO 重复调用问题
+        }
+
+    }
 
 
 }

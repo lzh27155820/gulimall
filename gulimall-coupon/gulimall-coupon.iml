@@ -26,6 +26,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="gulimall-commit" />
+    <orderEntry type="library" name="Maven: com.alibaba.fastjson2:fastjson2:2.0.10" level="project" />
     <orderEntry type="library" name="Maven: com.baomidou:mybatis-plus-boot-starter:3.4.3.4" level="project" />
     <orderEntry type="library" name="Maven: com.baomidou:mybatis-plus:3.4.3.4" level="project" />
     <orderEntry type="library" name="Maven: com.baomidou:mybatis-plus-extension:3.4.3.4" level="project" />

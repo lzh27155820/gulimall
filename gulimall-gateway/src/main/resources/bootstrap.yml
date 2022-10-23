@@ -36,15 +36,27 @@ spring:
         - id: product_route
           uri: lb://gulimall-produect
           predicates:
-            - Path=/api/product/**
+            - Path=/api/product/**, /hello
           filters:
             - RewritePath=/api/(?<segment>.*),/$\{segment}
 
         - id: admin_route
-          uri: lb://renren-fast
+          uri: lb://renren-fast #负载均衡
           predicates:
-            - Path=/api/**
+            - Path=/api/** #匹配路径
           filters:
-            - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}
+            - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment} #重写路径
+
+
+
+        - id: nginx_serach_route
+          uri: lb://guilimall-search
+          predicates:
+            - Host=search.gulimall.com  #根据请求的host判断是否该服务
+        - id: nginx_product_route
+          uri: lb://gulimall-produect
+          predicates:
+            - Host=gulimall.com  #根据请求的host判断是否该服务
+
   profiles:
     active: dev

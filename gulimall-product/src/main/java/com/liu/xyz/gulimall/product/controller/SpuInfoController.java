@@ -26,6 +26,16 @@ public class SpuInfoController {
     @Autowired
     private SpuInfoService spuInfoService;
 
+
+    /**
+     * 商家上架 http://localhost:88/api/product/spuinfo/5/up
+     */
+    @RequestMapping("/{spuId}/up")
+    public R spuUp(@PathVariable("spuId") Long spuId){
+
+        spuInfoService.up(spuId);
+        return R.ok();
+    }
     /**
      * 列表
      */

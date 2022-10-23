@@ -20,6 +20,7 @@
         <module>renren-generator</module>
         <module>gulimall-commit</module>
         <module>gulimall-third-party</module>
+        <module>gulimall-search</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -58,6 +59,7 @@
         <nimbus-jose-jwt.version>9.23</nimbus-jose-jwt.version>
         <mall-common.version>1.0-SNAPSHOT</mall-common.version>
         <mall-mbg.version>1.0-SNAPSHOT</mall-mbg.version>
+        <fastjson2-version>2.0.10</fastjson2-version>
     </properties>
 
     <dependencies>
@@ -107,18 +109,13 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!--mall通用模块-->
             <dependency>
-                <groupId>com.macro.mall</groupId>
-                <artifactId>mall-common</artifactId>
-                <version>${mall-common.version}</version>
+                <groupId>com.alibaba.fastjson2</groupId>
+                <artifactId>fastjson2</artifactId>
+                <version>${fastjson2-version}</version>
             </dependency>
-            <!--mall中MBG生成模块-->
-            <dependency>
-                <groupId>com.macro.mall</groupId>
-                <artifactId>mall-mbg</artifactId>
-                <version>${mall-mbg.version}</version>
-            </dependency>
+
+
             <!--MyBatis分页插件starter-->
             <dependency>
                 <groupId>com.github.pagehelper</groupId>

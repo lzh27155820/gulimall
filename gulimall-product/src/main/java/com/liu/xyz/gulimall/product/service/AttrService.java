@@ -6,6 +6,7 @@ import com.liu.xyz.gulimall.product.entity.AttrEntity;
 import com.liu.xyz.gulimall.product.vo.AttrRespVO;
 import com.liu.xyz.gulimall.product.vo.AttrVO;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,5 +46,12 @@ public interface AttrService extends IService<AttrEntity> {
      * @param attr
      */
     void updateAttr(AttrVO attr);
+
+    /**
+     *
+     * @param attrIds
+     * @return
+     */
+    List<Long> getSearchAttrIds(List<Long> attrIds);
 }
 

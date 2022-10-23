@@ -4,10 +4,12 @@ import com.liu.xyz.common.utils.PageUtils;
 import com.liu.xyz.common.utils.R;
 import com.liu.xyz.gulimall.ware.entity.WareSkuEntity;
 import com.liu.xyz.gulimall.ware.service.WareSkuService;
+import com.liu.xyz.common.to.SkuHasStockVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
@@ -24,6 +26,21 @@ import java.util.Map;
 public class WareSkuController {
     @Autowired
     private WareSkuService wareSkuService;
+
+
+    /**
+     *
+     */
+
+    @RequestMapping("/hastStock")
+    public R<List<SkuHasStockVo>> hastStock(@RequestBody List<Long> skuId){
+
+       List<SkuHasStockVo> skuHasStockVos=wareSkuService.hastStock(skuId);
+
+
+          return R.ok().put("data",skuHasStockVos);
+      //  return  r;
+    }
 
     /**
      * 列表

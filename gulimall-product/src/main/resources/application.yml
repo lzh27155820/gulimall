@@ -8,20 +8,32 @@ spring:
     nacos:
       config:
         server-addr: localhost:8848
+
   jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
+    date-format: yyyy-MM-dd HH:mm:ss #返回给前端的日期解析格式
+  thymeleaf:
+    cache: false #关闭缓存
+
 
   application:
     name: gulimall-produect
+  redis:
+    host: 192.168.229.151
+  cache:
+    type: redis #spring cache 整合 redis
+    redis:
+      time-to-live: 3600000 #单位毫秒级别 把cache缓存的数据设置过期时间
+     # use-key-prefix: false  #是否用前缀
+      #key-prefix: CHECK_  #缓存前缀
+      cache-null-values: true #可以缓存为null
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
   global-config:
     db-config:
-      id-type: auto
-
+      id-type: auto #id 自增
 
 server:
   port: 9000
 logging:
   level:
-    com.liu.xyz: debug
+    com.liu.xyz: error

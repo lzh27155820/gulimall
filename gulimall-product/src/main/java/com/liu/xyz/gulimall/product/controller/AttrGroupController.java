@@ -34,6 +34,7 @@ public class AttrGroupController {
     private CategoryService categoryService;
 
     /**
+     * 17、获取分类下所有分组&关联属性
      * http://localhost:88/api/product/attrgroup/225/withattr?t=1665035579458
      */
     @RequestMapping("/{categoryId}/withattr")

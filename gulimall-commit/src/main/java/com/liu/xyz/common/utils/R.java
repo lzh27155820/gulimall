@@ -6,6 +6,8 @@ package com.liu.xyz.common.utils; /**
  * 版权所有，侵权必究！
  */
 
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.TypeReference;
 import org.apache.http.HttpStatus;
 
 import java.util.HashMap;
@@ -16,9 +18,29 @@ import java.util.Map;
  *
  * @author Mark sunlightcs@gmail.com
  */
-public class R extends HashMap<String, Object> {
+
+public class R<T> extends HashMap<String, Object> {
 	private static final long serialVersionUID = 1L;
-	
+
+	private T data;
+
+	public T getData(String key, TypeReference<T>  typeReference) {
+/**
+ * 远程调用的值，先转string 在转obj
+ */
+		Object data = get(key);
+		String jsonString = JSON.toJSONString(data);
+		T o = JSON.parseObject(jsonString, typeReference);
+		return o;
+	}
+	public T getData() {
+		return data;
+	}
+
+	public void setData(T data) {
+		this.data = data;
+	}
+
 	public R() {
 		put("code", 0);
 		put("msg", "success");

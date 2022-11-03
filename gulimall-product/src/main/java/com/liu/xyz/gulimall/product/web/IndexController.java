@@ -30,6 +30,7 @@ public class IndexController {
     @GetMapping({"/","/index.html"})
     public String index(Model model){
 
+
         //自动拼前后缀
 
        List<CategoryEntity> categorys =categoryService.getLevelCategorys();

@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 /***
  *  数据校验在需要在mvc的controller的身上加上一个
@@ -41,7 +42,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  *              击穿    sync = true 只能解决本地锁，不能解决分布式锁
  * create liu 2022-09-29
  */
-//@MapperScan("com.liu.xyz.gulimall.product.dao")
+
+@EnableRedisHttpSession
 @EnableCaching //开启cache缓存
 @EnableFeignClients(basePackages = "com.liu.xyz.gulimall.product.feign")
 @SpringBootApplication

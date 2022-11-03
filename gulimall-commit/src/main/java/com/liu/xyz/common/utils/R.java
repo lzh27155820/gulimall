@@ -24,14 +24,21 @@ public class R<T> extends HashMap<String, Object> {
 
 	private T data;
 
-	public T getData(String key, TypeReference<T>  typeReference) {
-/**
- * 远程调用的值，先转string 在转obj
- */
-		Object data = get(key);
+//	public <T> getData(String key, TypeReference<T>  typeReference) {
+///**
+// * 远程调用的值，先转string 在转obj
+// */
+//		Object data = get(key);
+//		String jsonString = JSON.toJSONString(data);
+//		T o = JSON.parseObject(jsonString, typeReference);
+//		return o;
+//	}
+	//利用fastjson进行反序列化
+	public <T> T getData(String key,TypeReference<T> typeReference) {
+		Object data = get(key);	//默认是map
 		String jsonString = JSON.toJSONString(data);
-		T o = JSON.parseObject(jsonString, typeReference);
-		return o;
+		T t = JSON.parseObject(jsonString, typeReference);
+		return t;
 	}
 	public T getData() {
 		return data;

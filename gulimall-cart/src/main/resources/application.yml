@@ -1,0 +1,25 @@
+spring:
+  thymeleaf:
+    cache: false
+  jackson:
+    date-format: yyyy-MM-dd
+
+  application:
+    name: gulimall-cart
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+  redis:
+    host: 192.168.229.151
+  session:
+    store-type: redis
+server:
+  port: 16000
+
+
+gulimall:
+  thread:
+    coreSize: 10
+    maxSize:  20
+    keepAliveTime: 300

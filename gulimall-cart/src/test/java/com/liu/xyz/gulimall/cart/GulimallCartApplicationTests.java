@@ -1,11 +1,10 @@
-package com.liu.xyz.gulimallmember;
-
+package com.liu.xyz.gulimall.cart;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class GulimallMemberApplicationTests {
+class GulimallCartApplicationTests {
 
     @Test
     void contextLoads() {

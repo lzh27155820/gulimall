@@ -21,6 +21,8 @@
         <module>gulimall-commit</module>
         <module>gulimall-third-party</module>
         <module>gulimall-search</module>
+        <module>gulimall-coupon</module>
+        <module>gulimall-auth-server</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

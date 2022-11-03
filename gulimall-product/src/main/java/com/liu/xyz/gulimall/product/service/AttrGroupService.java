@@ -6,6 +6,7 @@ import com.liu.xyz.gulimall.product.entity.AttrEntity;
 import com.liu.xyz.gulimall.product.entity.AttrGroupEntity;
 import com.liu.xyz.gulimall.product.vo.AttrAndGroupID;
 import com.liu.xyz.gulimall.product.vo.AttrGroupWithAttrs;
+import com.liu.xyz.gulimall.product.web.vo.SpuItemAttrGroupVo;
 
 import java.util.List;
 import java.util.Map;
@@ -44,4 +45,12 @@ public interface AttrGroupService extends IService<AttrGroupEntity> {
     PageUtils getNoattrRelation(Map<String, Object> params, Long attrGroupId);
 
     List<AttrGroupWithAttrs> getAttrGroupWithAttrByCategoryId(Long categoryId);
+
+    /**
+     * 重点sql语句
+     * @param spuId
+     * @param catalogId
+     * @return
+     */
+    List<SpuItemAttrGroupVo> getAttrGroupWithAttrsBySpuId(Long spuId, Long catalogId);
 }

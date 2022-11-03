@@ -20,4 +20,27 @@
         </foreach>
     </delete>
 
+
+    <resultMap id="attrGroupWithAttrs" type="com.liu.xyz.gulimall.product.web.vo.SpuItemAttrGroupVo">
+        <result column="attr_group_name" property="groupName"></result>
+        <collection property="attrs" ofType="com.liu.xyz.gulimall.product.vo.Attr">
+            <result column="attr_id" property="attrId"></result>
+            <result column="attr_name" property="attrName"></result>
+            <result column="attr_value" property="attrValue"></result>
+        </collection>
+    </resultMap>
+    <select id="getAttrGroupWithAttrsBySpuId" resultMap="attrGroupWithAttrs">
+
+        SELECT
+            pav.spu_id,
+            ag.attr_group_id,
+            ag.attr_group_name,
+            pav.attr_name,
+            aar.attr_id,
+            pav.attr_value
+        FROM `pms_attr_group` ag
+                 LEFT  JOIN  `pms_attr_attrgroup_relation` aar ON ag.attr_group_id=aar.attr_group_id
+                 LEFT JOIN `pms_product_attr_value` pav ON aar.attr_id=pav.attr_id
+        WHERE ag.catelog_id=#{catalogId} AND pav.spu_id=#{spuId}
+    </select>
 </mapper>

@@ -221,6 +221,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
     }
 
     /**
+     * 重点2
      *  上分布式锁
      * @return
      */
@@ -252,15 +253,22 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
     }
 
     /**
+     * 重点1
      * 使用redis的机制枷锁 防止雪崩 击穿
      * @return
      */
+    @Override
     public  Map<String, List<Catelog2Vo>> getCatalogJsonForDBRedis() {
         /**
          *
          *   0.为什么使用redis 的setnx 的机制 当成一把锁是synchronized 不行吗
          *   1.为什么要设置过期时间
+         *      如果不设置，程序在if(lock)死机别人永远进不去，它也出不来，会导致死锁，必须是一致性的
          *   2.为什么要设置uuId
+         *      如果业务时间执行很长，key自动过期了,删的就是别人的锁
+         *          如果正好判断是当前值，正要删除锁的时候，锁已经过期， 别人已经设置到了新的值。那么我们删除的是别人的锁
+         *      解决使用: 删除锁必须保证原子性。使用redis+Lua脚本完成
+         *
          */
         String uuid = UUID.randomUUID().toString();
         Boolean lock = redisTemplate.opsForValue().setIfAbsent("hello", uuid,300,TimeUnit.SECONDS);
@@ -291,6 +299,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
     //获取三级分类数据
 
     /**
+     * 重点2
      *  应对的是分布式锁情况下
      * @return
      */

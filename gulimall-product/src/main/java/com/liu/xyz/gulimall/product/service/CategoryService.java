@@ -53,5 +53,6 @@ public interface CategoryService extends IService<CategoryEntity> {
         获取
      */
     Map<String, List<Catelog2Vo>> getCatalogJson();
+    Map<String, List<Catelog2Vo>> getCatalogJsonForDBRedis();
 }
 

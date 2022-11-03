@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: gulimall-auth-server
+  thymeleaf:
+    cache: false
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+  redis:
+    host: 192.168.229.151
+
+  session:
+    store-type: redis #springsession的缓存容器
+server:
+  port: 8160
+wx:
+  open:
+    app_id: wxed9954c01bb89b47
+    # 微信开放平台 appsecret
+    app_secret: a7482517235173ddb4083788de60b90e
+    # 微信开放平台 重定向url
+    redirect_url: http://localhost:8160/api/ucenter/wx/callback
+
+
+gitee:
+  oauth:
+    clientid: 9f49ec82d1ea87923abf5f2874165251dfec58600047b949dccc3def48b976d8
+    clientsecret: c5973bc7da192ee0731458a6aba9a400af0ee87aa25ddb12f805cae66669b67b
+    callback: http://auth.gulimall.com/gitee

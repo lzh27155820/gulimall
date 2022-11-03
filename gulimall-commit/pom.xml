@@ -67,12 +67,21 @@
 <!--            <artifactId>spring-cloud-starter-alicloud-oss</artifactId>-->
 <!--            <version>2.2.0.RELEASE</version>-->
 <!--        </dependency>-->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.5</version>
-            <scope>provided</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>javax.servlet</groupId>-->
+<!--            <artifactId>servlet-api</artifactId>-->
+<!--            <version>2.5</version>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+
+        <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+<!--        <dependency>-->
+<!--            <groupId>javax.servlet</groupId>-->
+<!--            <artifactId>javax.servlet-api</artifactId>-->
+<!--            <version>3.1.0</version>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+
 
         <!--        服务注册/发现-->
         <dependency>

@@ -13,8 +13,6 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss #返回给前端的日期解析格式
   thymeleaf:
     cache: false #关闭缓存
-
-
   application:
     name: gulimall-produect
   redis:
@@ -26,6 +24,8 @@ spring:
      # use-key-prefix: false  #是否用前缀
       #key-prefix: CHECK_  #缓存前缀
       cache-null-values: true #可以缓存为null
+  session:
+    store-type: redis #springsession的缓存容器
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
   global-config:
@@ -37,3 +37,9 @@ server:
 logging:
   level:
     com.liu.xyz: error
+
+gulimall:
+  thread:
+    coreSize: 10
+    maxSize:  20
+    keepAliveTime: 300

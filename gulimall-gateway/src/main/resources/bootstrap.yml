@@ -56,7 +56,14 @@ spring:
         - id: nginx_product_route
           uri: lb://gulimall-produect
           predicates:
-            - Host=gulimall.com  #根据请求的host判断是否该服务
-
+            - Host=gulimall.com,item.gulimall.com  #根据请求的host判断是否该服务
+        - id: nginx_auth_route
+          uri: lb://gulimall-auth-server
+          predicates:
+            - Host=auth.gulimall.com  #根据请求的host判断是否该服务
+        - id: nginx_cart_route
+          uri: lb://gulimall-cart
+          predicates:
+              - Host=cart.gulimall.com  #根据请求的host判断是否该服务
   profiles:
     active: dev
